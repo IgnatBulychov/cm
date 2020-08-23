@@ -314,7 +314,25 @@ class IFptr(object):
         LIBFPTR_PARAM_LICENSE_VALID_FROM,
         LIBFPTR_PARAM_LICENSE_VALID_UNTIL,
         LIBFPTR_PARAM_MARKING_CODE_TYPE,
-    ) = RANGE(65536, 65827)
+        LIBFPTR_PARAM_SETTING_NAME,
+        LIBFPTR_PARAM_SETTING_TYPE,
+        LIBFPTR_PARAM_FONT_WIDTH,
+        LIBFPTR_PARAM_REMOTE_CALL,
+        LIBFPTR_PARAM_SCRIPT_PARAMS,
+        LIBFPTR_PARAM_IGNORE_EMPTY,
+        LIBFPTR_PARAM_METHOD_DATA,
+        LIBFPTR_PARAM_METHOD_RESULT,
+        LIBFPTR_PARAM_RPC_SERVER_OS,
+        LIBFPTR_PARAM_RPC_SERVER_VERSION,
+        LIBFPTR_PARAM_RPC_DRIVER_VERSION,
+        LIBFPTR_PARAM_LOCKED,
+        LIBFPTR_PARAM_BOUND,
+        LIBFPTR_PARAM_COMMODITIES_TABLE_FAULT,
+        LIBFPTR_PARAM_HAS_ADDITIONAL_DATA,
+        LIBFPTR_PARAM_FISCAL_SIGN_ARCHIVE,
+        LIBFPTR_PARAM_COMMAND_GROUP,
+        LIBFPTR_PARAM_ERROR_CODE,
+    ) = RANGE(65536, 65845)
 
     (
         LIBFPTR_OK,
@@ -562,14 +580,29 @@ class IFptr(object):
         LIBFPTR_ERROR_UNIVERSAL_COUNTERS_FAULT,
         LIBFPTR_ERROR_INVALID_TAX_SUM,
         LIBFPTR_ERROR_INVALID_MARKING_CODE_TYPE,
-    ) = RANGE(0, 245)
+        LIBFPTR_ERROR_LICENSE_HARD_FAULT,
+        LIBFPTR_ERROR_LICENSE_INVALID_SIGN,
+        LIBFPTR_ERROR_LICENSE_INVALID_SERIAL,
+        LIBFPTR_ERROR_LICENSE_INVALID_TIME,
+        LIBFPTR_ERROR_DOCUMENT_CANCELED,
+        LIBFPTR_ERROR_INVALID_SCRIPT_PARAMS,
+        LIBFPTR_ERROR_CLICHE_TOO_LONG,
+        LIBFPTR_ERROR_COMMODITIES_TABLE_FAULT,
+        LIBFPTR_ERROR_COMMODITIES_TABLE,
+        LIBFPTR_ERROR_COMMODITIES_TABLE_INVALID_TAG,
+        LIBFPTR_ERROR_COMMODITIES_TABLE_INVALID_TAG_SIZE,
+        LIBFPTR_ERROR_COMMODITIES_TABLE_NO_TAG_DATA,
+        LIBFPTR_ERROR_COMMODITIES_TABLE_NO_FREE_MEMORY,
+    ) = RANGE(0, 258)
 
     (
         LIBFPTR_ERROR_BASE_WEB,
         LIBFPTR_ERROR_RECEIPT_PARSE_ERROR,
         LIBFPTR_ERROR_INTERRUPTED_BY_PREVIOUS_ERRORS,
         LIBFPTR_ERROR_DRIVER_SCRIPT_ERROR,
-    ) = RANGE(500, 504)
+        LIBFPTR_ERROR_VALIDATE_FUNC_NOT_FOUND,
+        LIBFPTR_ERROR_WEB_FAIL,
+    ) = RANGE(500, 506)
 
     (
         LIBFPTR_PORT_COM,
@@ -696,7 +729,8 @@ class IFptr(object):
         LIBFPTR_RT_DISCOUNTS,
         LIBFPTR_RT_JOURNAL_DOCUMENT_BY_NUMBERS,
         LIBFPTR_RT_JOURNAL_DOCUMENT_BY_SHIFTS,
-    ) = RANGE(0, 23)
+        LIBFPTR_RT_CLOSE_SHIFT_REPORTS,
+    ) = RANGE(0, 24)
 
     (
         LIBFPTR_PT_CASH,
@@ -721,7 +755,8 @@ class IFptr(object):
         LIBFPTR_TAX_NO,
         LIBFPTR_TAX_VAT20,
         LIBFPTR_TAX_VAT120,
-    ) = RANGE(0, 9)
+        LIBFPTR_TAX_INVALID,
+    ) = RANGE(0, 10)
 
     (
         LIBFPTR_EXTERNAL_DEVICE_DISPLAY,
@@ -778,7 +813,9 @@ class IFptr(object):
         LIBFPTR_DT_SCRIPTS_INFO,
         LIBFPTR_DT_SHIFT_TOTALS,
         LIBFPTR_DT_WIFI_INFO,
-    ) = RANGE(0, 47)
+        LIBFPTR_DT_FONT_INFO,
+        LIBFPTR_DT_SOFTLOCK_STATUS,
+    ) = RANGE(0, 49)
 
     (
         LIBFPTR_FNDT_TAG_VALUE,
@@ -840,7 +877,9 @@ class IFptr(object):
         LIBFPTR_RT_FN_SUM_COUNTERS,
         LIBFPTR_RT_FN_QUANTITY_COUNTERS,
         LIBFPTR_RT_FN_UNSENT_DOCS_COUNTERS,
-    ) = RANGE(0, 10)
+        LIBFPTR_RT_SETTINGS,
+        LIBFPTR_RT_RUN_COMMAND,
+    ) = RANGE(0, 12)
 
     (
         LIBFPTR_LOG_ERROR,
@@ -900,9 +939,16 @@ class IFptr(object):
     ) = RANGE(0, 5)
 
     (
+        LIBFPTR_ST_NUMBER,
+        LIBFPTR_ST_STRING,
+        LIBFPTR_ST_BOOL,
+    ) = RANGE(0, 3)
+
+    (
         LIBFPTR_SCRIPT_EXECUTABLE,
         LIBFPTR_SCRIPT_JSON,
-    ) = RANGE(0, 2)
+        LIBFPTR_SCRIPT_SETTINGS,
+    ) = RANGE(0, 3)
 
     (
         LIBFPTR_UCL_UNUSED,
@@ -927,6 +973,17 @@ class IFptr(object):
         LIBFPTR_MCT_EGAIS_20,
         LIBFPTR_MCT_EGAIS_30,
     ) = RANGE(0, 3)
+
+    (
+        LIBFPTR_ERROR_BASE_RPC,
+        LIBFPTR_ERROR_RCP_SERVER_BUSY,
+        LIBFPTR_ERROR_RCP_SERVER_VERSION,
+        LIBFPTR_ERROR_RCP_SERVER_EXCHANGE,
+    ) = RANGE(600, 604)
+
+    LIBFPTR_ERROR_WEB_END = 599
+
+    LIBFPTR_OFD_CHANNEL_AUTO = 2
 
     LIBFPTR_SETTING_LIBRARY_PATH = "LibraryPath"
 
@@ -973,6 +1030,10 @@ class IFptr(object):
     LIBFPTR_SETTING_AUTO_RECONNECT = "AutoReconnect"
 
     LIBFPTR_SETTING_INVERT_CASH_DRAWER_STATUS = "InvertCashDrawerStatus"
+
+    LIBFPTR_SETTING_REMOTE_SERVER_ADDR = "RemoteServerAddr"
+
+    LIBFPTR_SETTING_REMOTE_SERVER_CONNECTION_TIMEOUT = "RemoteServerConnectionTimeout"
 
     LIBFPTR_MODEL_UNKNOWN = 0
 
@@ -1130,6 +1191,10 @@ class IFptr(object):
 
     LIBFPTR_FN_DOC_BSO_CORRECTION = 41
 
+    LIBFPTR_FWT_FIRMWARE = 0
+
+    LIBFPTR_FWT_SCRIPTS = 2
+
     LIBFPTR_UCF_CALC_SUMS = 1
 
     LIBFPTR_UCF_CALC_QUANTITIES = 2
@@ -1140,9 +1205,18 @@ class IFptr(object):
 
     LIBFPTR_UC_OTHERS = 4294967295
 
+    LIBFPTR_ERROR_USERS_SCRIPTS_BASE = 1000
+
+    LIBFPTR_ERROR_USERS_SCRIPTS_END = 1999
+
+    LIBFPTR_ERROR_RPC_END = 699
+
     DEFAULT_BUFF_SIZE = 512
 
     CREATE_METHOD = ctypes.CFUNCTYPE(ctypes.c_int, ctypes.POINTER(ctypes.c_void_p))
+    CREATE_WITH_ID_METHOD = ctypes.CFUNCTYPE(ctypes.c_int,
+                                             ctypes.POINTER(ctypes.c_void_p),
+                                             ctypes.c_wchar_p)
     DESTROY_METHOD = ctypes.CFUNCTYPE(None, ctypes.POINTER(ctypes.c_void_p))
     GET_VERSION_METHOD = ctypes.CFUNCTYPE(ctypes.c_char_p)
 
@@ -1238,6 +1312,7 @@ class IFptr(object):
                                            ctypes.POINTER(ctypes.c_int))
 
     LOG_WRITE_METHOD = ctypes.CFUNCTYPE(ctypes.c_int,
+                                        ctypes.c_void_p,
                                         ctypes.c_wchar_p,
                                         ctypes.c_int,
                                         ctypes.c_wchar_p)
@@ -1247,43 +1322,59 @@ class IFptr(object):
                                               ctypes.c_int,
                                               ctypes.c_void_p)
 
-    def __init__(self, lib_path):
+    def __init__(self, lib_path="", fptr_id=""):
         assert sys.version_info >= (2, 6)
         self.lib_path = lib_path
-        if platform.system() == 'Windows':
-            if not self.lib_path.endswith('fptr10.dll'):
-                self.lib_path = os.path.join(self.lib_path, 'fptr10.dll')
-            try:
-                ctypes.CDLL(os.path.join(os.path.dirname(self.lib_path), 'msvcp140.dll'), mode=ctypes.RTLD_LOCAL)
+
+        try:
+            if platform.system() == 'Windows':
+                if len(self.lib_path) == 0:
+                    rk = OpenKey(HKEY_LOCAL_MACHINE, "Software\\ATOL\\Drivers\\10.0\\KKT")
+                    rv = QueryValueEx(rk, "INSTALL_DIR")[0]
+                    self.lib_path = os.path.join(rv, 'bin', 'fptr10.dll')
+                else:
+                    if not self.lib_path.endswith('fptr10.dll'):
+                        self.lib_path = os.path.join(self.lib_path, 'fptr10.dll')
+                try:
+                    self.library = ctypes.CDLL(self.lib_path, mode=ctypes.RTLD_LOCAL)
+                except OSError:
+                    ctypes.CDLL(os.path.join(os.path.dirname(self.lib_path), 'msvcp140.dll'), mode=ctypes.RTLD_LOCAL)
+                    self.library = ctypes.CDLL(self.lib_path, mode=ctypes.RTLD_LOCAL)
+
+            elif platform.system() == 'Darwin':
+                if not self.lib_path.endswith('fptr10.framework/fptr10'):
+                    self.lib_path = os.path.join(self.lib_path, 'fptr10.framework/fptr10')
+                try:
+                    self.library = ctypes.CDLL(self.lib_path, mode=ctypes.RTLD_LOCAL)
+                except OSError:
+                    self.lib_path = lib_path
+                    if not self.lib_path.endswith('libfptr10.dylib'):
+                        self.lib_path = os.path.join(self.lib_path, 'libfptr10.dylib')
+                    self.library = ctypes.CDLL(self.lib_path, mode=ctypes.RTLD_LOCAL)
+
+            else:
+                if not self.lib_path.endswith('libfptr10.so'):
+                    self.lib_path = os.path.join(self.lib_path, 'libfptr10.so')
                 self.library = ctypes.CDLL(self.lib_path, mode=ctypes.RTLD_LOCAL)
-            except OSError:
-                self.lib_path = os.path.join(
-                    QueryValueEx(
-                        OpenKey(
-                            HKEY_LOCAL_MACHINE,
-                            "Software\\ATOL\\Drivers\\10.0\\KKT"),
-                        "INSTALL_DIR")[0],
-                    'bin\\fptr10.dll')
-                ctypes.CDLL(os.path.join(os.path.dirname(self.lib_path), 'msvcp140.dll'), mode=ctypes.RTLD_LOCAL)
-                self.library = ctypes.CDLL(self.lib_path, mode=ctypes.RTLD_LOCAL)
-        elif platform.system() == 'Darwin':
-            if not self.lib_path.endswith('fptr10.framework/fptr10'):
-                self.lib_path = os.path.join(self.lib_path, 'fptr10.framework/fptr10')
-            try:
-                self.library = ctypes.CDLL(self.lib_path, mode=ctypes.RTLD_LOCAL)
-            except OSError:
-                self.lib_path = lib_path
-                if not self.lib_path.endswith('libfptr10.dylib'):
-                    self.lib_path = os.path.join(self.lib_path, 'libfptr10.dylib')
-                self.library = ctypes.CDLL(self.lib_path, mode=ctypes.RTLD_LOCAL)
-        else:
-            if not self.lib_path.endswith('libfptr10.so'):
-                self.lib_path = os.path.join(self.lib_path, 'libfptr10.so')
-            self.library = ctypes.CDLL(self.lib_path, mode=ctypes.RTLD_LOCAL)
+        except OSError:
+            raise Exception(
+                'Driver library not found in {}'.format(
+                    '\"' +
+                    os.path.dirname(
+                        self.lib_path) +
+                    '\"' if len(lib_path) != 0 else 'search folders'))
 
         self.interface = ctypes.c_void_p(0)
-        _create = self.CREATE_METHOD(('libfptr_create', self.library))
-        _create(ctypes.pointer(self.interface))
+        if fptr_id:
+            _create = self.CREATE_WITH_ID_METHOD(('libfptr_create_with_id', self.library))
+            create_r = _create(ctypes.pointer(self.interface), ctypes.c_wchar_p(fptr_id))
+        else:
+            _create = self.CREATE_METHOD(('libfptr_create', self.library))
+            create_r = _create(ctypes.pointer(self.interface))
+        if create_r == -2:
+            raise AttributeError('Invalid [id] format')
+        elif create_r != 0:
+            raise Exception('Can`t create driver handle')
 
         self._setByteArray = self.SET_BYTEARRAY_METHOD(('libfptr_set_param_bytearray', self.library))
         self._setUserByteArray = self.SET_BYTEARRAY_METHOD(('libfptr_set_user_param_bytearray', self.library))
@@ -1328,7 +1419,7 @@ class IFptr(object):
         self._errorCode = self.GET_ERROR_CODE_METHOD(('libfptr_error_code', self.library))
         self._errorDescription = self.GET_ERROR_DESCRIPTION_METHOD(('libfptr_error_description', self.library))
         self._resetError = self.RESET_ERROR_METHOD(('libfptr_reset_error', self.library))
-        self._logWrite = self.LOG_WRITE_METHOD(('libfptr_log_write', self.library))
+        self._logWrite = self.LOG_WRITE_METHOD(('libfptr_log_write_ex', self.library))
         self._showProperties = self.SHOW_PROPERTIES_METHOD(('libfptr_show_properties', self.library))
 
     def __del__(self):
@@ -1339,7 +1430,7 @@ class IFptr(object):
         return self._getVersion()
 
     def logWrite(self, tag, level, message):
-        return self._logWrite(tag, level, message)
+        return self._logWrite(self.interface, tag, level, message)
 
     def showProperties(self, parentType, parent):
         return self._showProperties(self.interface, parentType, parent)
@@ -1389,16 +1480,17 @@ class IFptr(object):
         return buff.value
 
     def setParam(self, paramId, param):
-        if isinstance(param, int):
-            self._setInt(self.interface, ctypes.c_int(paramId), ctypes.c_uint(param))
-        elif isinstance(param, bool):
+        if isinstance(param, bool):
             self._setBool(self.interface, ctypes.c_int(paramId), ctypes.c_int(param))
+        elif isinstance(param, int):
+            if param < 0 or param > 4294967295:
+                raise ValueError("Invalid 'param' value {0}".format(param))
+            self._setInt(self.interface, ctypes.c_int(paramId), ctypes.c_uint(param))
         elif isinstance(param, float):
             self._setDouble(self.interface, ctypes.c_int(paramId), ctypes.c_double(param))
-        elif isinstance(param, list):
-            self._setByteArray(self.interface, ctypes.c_int(paramId),
-                               (ctypes.c_ubyte * len(param))(*param), len(param))
-        elif isinstance(param, bytearray):
+        elif isinstance(param, TEXT):
+            self._setString(self.interface, ctypes.c_int(paramId), ctypes.c_wchar_p(param))
+        elif isinstance(param, list) or isinstance(param, bytearray) or isinstance(param, bytes):
             self._setByteArray(self.interface, ctypes.c_int(paramId),
                                (ctypes.c_ubyte * len(param))(*param), len(param))
         elif isinstance(param, datetime.datetime):
@@ -1406,22 +1498,21 @@ class IFptr(object):
                               param.date().month,
                               param.date().day,
                               param.time().hour, param.time().minute, param.time().second)
-        elif isinstance(param, TEXT):
-            self._setString(self.interface, ctypes.c_int(paramId), ctypes.c_wchar_p(param))
         else:
             raise TypeError("Invalid 'param' type {0}".format(type(param)))
 
     def setUserParam(self, paramId, param):
-        if isinstance(param, int):
-            self._setUserInt(self.interface, ctypes.c_int(paramId), ctypes.c_uint(param))
-        elif isinstance(param, bool):
+        if isinstance(param, bool):
             self._setUserBool(self.interface, ctypes.c_int(paramId), ctypes.c_int(param))
+        elif isinstance(param, int):
+            if param < 0 or param > 4294967295:
+                raise ValueError("Invalid 'param' value {0}".format(param))
+            self._setUserInt(self.interface, ctypes.c_int(paramId), ctypes.c_uint(param))
         elif isinstance(param, float):
             self._setUserDouble(self.interface, ctypes.c_int(paramId), ctypes.c_double(param))
-        elif isinstance(param, list):
-            self._setUserByteArray(self.interface, ctypes.c_int(paramId),
-                                   (ctypes.c_ubyte * len(param))(*param), len(param))
-        elif isinstance(param, bytearray):
+        elif isinstance(param, TEXT):
+            self._setUserString(self.interface, ctypes.c_int(paramId), ctypes.c_wchar_p(param))
+        elif isinstance(param, list) or isinstance(param, bytearray) or isinstance(param, bytes):
             self._setUserByteArray(self.interface, ctypes.c_int(paramId),
                                    (ctypes.c_ubyte * len(param))(*param), len(param))
         elif isinstance(param, datetime.datetime):
@@ -1429,22 +1520,21 @@ class IFptr(object):
                                   param.date().month,
                                   param.date().day,
                                   param.time().hour, param.time().minute, param.time().second)
-        elif isinstance(param, TEXT):
-            self._setUserString(self.interface, ctypes.c_int(paramId), ctypes.c_wchar_p(param))
         else:
             raise TypeError("Invalid 'param' type {0}".format(type(param)))
 
     def setNonPrintableParam(self, paramId, param):
-        if isinstance(param, int):
-            self._setNonPrintableInt(self.interface, ctypes.c_int(paramId), ctypes.c_uint(param))
-        elif isinstance(param, bool):
+        if isinstance(param, bool):
             self._setNonPrintableBool(self.interface, ctypes.c_int(paramId), ctypes.c_int(param))
+        elif isinstance(param, int):
+            if param < 0 or param > 4294967295:
+                raise ValueError("Invalid 'param' value {0}".format(param))
+            self._setNonPrintableInt(self.interface, ctypes.c_int(paramId), ctypes.c_uint(param))
         elif isinstance(param, float):
             self._setNonPrintableDouble(self.interface, ctypes.c_int(paramId), ctypes.c_double(param))
-        elif isinstance(param, list):
-            self._setNonPrintableByteArray(self.interface, ctypes.c_int(paramId),
-                                           (ctypes.c_ubyte * len(param))(*param), len(param))
-        elif isinstance(param, bytearray):
+        elif isinstance(param, TEXT):
+            self._setNonPrintableString(self.interface, ctypes.c_int(paramId), ctypes.c_wchar_p(param))
+        elif isinstance(param, list) or isinstance(param, bytearray) or isinstance(param, bytes):
             self._setNonPrintableByteArray(self.interface, ctypes.c_int(paramId),
                                            (ctypes.c_ubyte * len(param))(*param), len(param))
         elif isinstance(param, datetime.datetime):
@@ -1452,8 +1542,6 @@ class IFptr(object):
                                           param.date().month,
                                           param.date().day,
                                           param.time().hour, param.time().minute, param.time().second)
-        elif isinstance(param, TEXT):
-            self._setNonPrintableString(self.interface, ctypes.c_int(paramId), ctypes.c_wchar_p(param))
         else:
             raise TypeError("Invalid 'param' type {0}".format(type(param)))
 
@@ -1739,10 +1827,6 @@ class IFptr(object):
         return _method(self.interface)
 
     def utilFormNomenclature(self):
-        warnings.warn(
-            u'The method allows you to generate a product code of only the old format. Form the value of the product code (props 1162) yourself.',
-            DeprecationWarning,
-            stacklevel=2)
         _method = self.METHOD(('libfptr_util_form_nomenclature', self.library))
         return _method(self.interface)
 
@@ -1908,4 +1992,24 @@ class IFptr(object):
 
     def clearUniversalCountersCache(self):
         _method = self.METHOD(('libfptr_clear_universal_counters_cache', self.library))
+        return _method(self.interface)
+
+    def disableOfdChannel(self):
+        _method = self.METHOD(('libfptr_disable_ofd_channel', self.library))
+        return _method(self.interface)
+
+    def enableOfdChannel(self):
+        _method = self.METHOD(('libfptr_enable_ofd_channel', self.library))
+        return _method(self.interface)
+
+    def validateJson(self):
+        _method = self.METHOD(('libfptr_validate_json', self.library))
+        return _method(self.interface)
+
+    def reflectionCall(self):
+        _method = self.METHOD(('libfptr_reflection_call', self.library))
+        return _method(self.interface)
+
+    def getRemoteServerInfo(self):
+        _method = self.METHOD(('libfptr_get_remote_server_info', self.library))
         return _method(self.interface)

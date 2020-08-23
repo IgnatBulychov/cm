@@ -1,3 +1,9 @@
+/*let portCount = 5
+for (let index = 0; index < array.length; index++) {
+    const element = array[index];
+    
+}
+*/
 export default [
     'COM1',
     'COM2',

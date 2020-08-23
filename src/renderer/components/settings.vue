@@ -132,21 +132,21 @@ import { mapState } from 'vuex'
     },
     computed: {
       fiscalRegisters() {
-        return this.$store.state.main.fiscalRegisters
+        return this.$store.state.fiscalRegisters.fiscalRegisters
       }
     },
   
     created() {
-      this.$store.dispatch('main/getFiscalRegisters')
-      this.selectedFR = this.$store.state.main.currentFR
+      this.$store.dispatch('fiscalRegisters/getFiscalRegisters')
+      this.selectedFR = this.$store.state.fiscalRegisters.currentFR
     },
     methods: {
       deleteFiscalRegister(id) {
-        this.$store.dispatch('main/deleteFiscalRegister', id)
+        this.$store.dispatch('fiscalRegisters/deleteFiscalRegister', id)
       },
       save() {
         let app = this
-        this.$store.dispatch('main/saveCurrentFR', app.selectedFR)
+        this.$store.dispatch('fiscalRegisters/saveCurrentFR', app.selectedFR)
       }
     }
   }

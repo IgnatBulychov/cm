@@ -112,18 +112,28 @@
 
         settings:  {
             model: 'LIBFPTR_MODEL_ATOL_AUTO',  
-            connection: 'LIBFPTR_PORT_COM',
+            connection: 'LIBFPTR_PORT_TCPIP',
             comFile: "COM1",
             baudRate: 'LIBFPTR_PORT_BR_115200', 
-            IPAddress: "192.168.0.15", 
+            IPAddress: "192.168.0.13", 
             IPPort: 5555,            
         },
 
+        serial: 0,
         error: '',
         success: ''
       }
     },
-    created() {
+    mounted() {
+       let app = this
+        app.success = ''
+        app.error = ''
+        PythonShell.run('driver_version.py', app.pythonShellOptionsDEV, function (err, results) {
+          if (err) throw err;
+          console.log(results);
+         
+        });
+
     },
     computed: {
       pythonShellOptionsDEV() {
@@ -180,39 +190,78 @@
 
         PythonShell.run('json_task.py', options, function (err, results) {
           if (err) throw err;
-          if (results[0] == 'connectionFailed') {
-            app.error = 'Ошибка обмена'
+          
+          console.log(results)
+          /*if (results[0] == 'connectionFailed') {
+            console.log('Ошибка обмена')
           } else if (results[0] == 'error') {
-            app.error = 'Запрос не может быть выполнен'
+            console.log('Запрос не может быть выполнен')
           } else if (results[0] == '""') {
-            app.error = "Метод ничего не возвращает...скорее всего всё в порядке..."
+             console.log("Метод ничего не возвращает...скорее всего всё в порядке...")
           } else {
-            app.log = JSON.parse(JSON.parse(results[0]))
-          }
+            console.log('неизвестная ошибка')
+          }*/
         });
            
       },
       connectionTest () {  
+
         let app = this
+
         app.success = ''
         app.error = ''
+        let options = {
+              mode: 'text',
+              pythonPath: 'atol_python/python/python.exe',
+              pythonOptions: ['-u'],
+              scriptPath: 'atol_python',
+              args: [
+                app.settings.model, 
+                app.settings.connection, 
+                app.settings.comFile, 
+                app.settings.baudRate,
+                app.settings.IPAddress, 
+                app.settings.IPPort,
+                '{"type":"getDeviceInfo"}'
+              ] 
+            }
+
+            PythonShell.run('json_task.py', options, function (err, results) {
+console.log(results)
+              if (results[0] == 'connectionFailed') {
+             app.error = 'Нет связи с кассой'
+              }  else if (results[0] == 'error') {
+  app.error = 'Неверная команда'
+              }             
+              else {
+              app.serial = JSON.parse(JSON.parse(results[0])).deviceInfo.serial
+              
+              app.success = `Связь с ККТ ${JSON.parse(JSON.parse(results[0])).deviceInfo.serial} установлена` 
+            
+              }
+
+              
+            });
+/*
         PythonShell.run('connection_test.py', app.pythonShellOptionsDEV, function (err, results) {
           if (err) throw err;
+          
           console.log(results[0]);
-          app.log = results[0]
+          
           if (results[0] == 1) {
-            app.success = 'Связь установлена'
-            app.storeSettings()
-            app.connectionSuccess()
+            
+            
+
+
           } else {
             app.error = 'Нет связи'
           }
-        });
+        });*/
 
       },
       storeSettings() {
         let app = this
-        this.$store.dispatch('main/addFiscalRegister', app.settings)
+        this.$store.dispatch('fiscalRegisters/addFiscalRegister', [ app.settings, app.serial ])
         this.$emit('selected')   
       },
       getDeviceInfo() {
@@ -221,9 +270,10 @@
         app.makeJsonTask(task) 
       },
       connectionSuccess() {
+        
+        let app = this
         app.success = ''
         app.error = ''
-        let app = this
         let task = `{
           "type": "nonFiscal",
           "items": [

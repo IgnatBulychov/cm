@@ -1,44 +1,23 @@
 <template>
-    <v-card height="100%" width="100%">
 
-      <v-card-title>      
-        <v-btn @click="dialogAddFree = true" class="ma-2" tile outlined color="success">
-          <v-icon left>mdi-plus</v-icon> Добавить
-        </v-btn>
-        <v-btn @click="dialogAddFromBase = true" class="ma-2" tile outlined color="success">
-            <v-icon left>mdi-plus</v-icon> Добавить из базы
-        </v-btn> 
 
-          <v-text-field
+  <div class="  d-flex align-end " color="grey lighten-2"  height="100vh">
+   
+<div>
+ <v-text-field
            append-icon="mdi-map-marker-off"
             @click:append="addItem()"
             color="success"
-            label="Штрих код"
+            label="Штрихкод"
              prepend-icon="mdi-barcode-scan"
 
             outlined
           ></v-text-field>
+</div>
+   <div>
 
-          <v-dialog
-            v-model="dialogAddFree"
-            max-width="80%"
-          >
-            <add-free></add-free>
-          </v-dialog>
-
-           <v-dialog
-            v-model="dialogAddFromBase"
-            max-width="80%"
-          >
-            <add-from-base></add-from-base>
-          </v-dialog>
-
-
-
-      </v-card-title>
-
-      <v-card-text>
-        <v-simple-table>
+      </div>
+ <v-simple-table>
             <template v-slot:default>
               <thead>
                 <tr>
@@ -63,26 +42,53 @@
               </tbody>
             </template>
           </v-simple-table>
-        </v-card-text>
-<v-card-actions>
-  <v-icon>mdi-barcode-scan</v-icon>
+      
+  
+
+<div>
+     
+
+       <v-icon>mdi-barcode-scan</v-icon>
 <v-icon>mdi-qrcode-scan</v-icon>
 <v-icon>mdi-credit-card-outline</v-icon>
 <v-icon>mdi-tag-outline</v-icon>
 <v-icon>mdi-storefront-outline</v-icon>
+<v-icon>mdi-data-matrix-scan</v-icon>
+<v-icon>mdi-data-matrix</v-icon>
+      </div>
 
-</v-card-actions>
+
+      <div>
+        
+ <v-btn @click="dialogAddFree = true" class="ma-2" tile outlined color="success">
+          <v-icon left>mdi-plus</v-icon> Добавить
+        </v-btn>
+        <v-btn @click="dialogAddFromBase = true" class="ma-2" tile outlined color="success">
+            <v-icon left>mdi-plus</v-icon> Добавить из базы
+        </v-btn> 
+
+          <v-dialog
+            v-model="dialogAddFree"
+            max-width="80%"
+          >
+            <add-free></add-free>
+          </v-dialog>
+
+           <v-dialog
+            v-model="dialogAddFromBase"
+            max-width="80%"
+          >
+            <add-from-base></add-from-base>
+          </v-dialog>
+
+     </div>
+     
+    </div>
    
-  </v-card>
-
 </template>
 
 <script>
-const remote = require('electron').remote;
-  const application = remote.app;
- var Datastore = require('nedb')
-  var db = new Datastore({ filename: `${application.getPath('userData')}/base.db`, autoload: true });
- import addFree from './addFree'
+import addFree from './addFree'
   import addFromBase from './addFromBase'
   export default {
     name: 'registration',
@@ -91,7 +97,6 @@ const remote = require('electron').remote;
     },
     data() {
       return {
-         items: 0,
 
          dialogAddFree: false,
          dialogAddFromBase: false
@@ -107,9 +112,13 @@ const remote = require('electron').remote;
   }
 </script>
 
-<style>
-  
+<style scoped>
+.height-100 {
+  height: 100vh;
+  width: 100%;
+}
 </style>
+
 
 
 

@@ -53,8 +53,6 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "cadesplugin-crypto-pro-api": "^0.9.5",
-    "crypto-pro": "^1.1.2",
     "nedb": "^1.8.0",
     "python-shell": "^1.0.8",
     "vue": "^2.5.16",

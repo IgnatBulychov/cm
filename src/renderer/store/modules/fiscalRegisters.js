@@ -49,8 +49,8 @@ const actions = {
       commit('SET_FISCAL_REGISTERS', result)
     });
   },
-  addFiscalRegister ({ commit, dispatch }, settings) {
-    addFiscalRegisterToBase(dbFRSettings, settings).then(result => {
+  addFiscalRegister ({ commit, dispatch }, [ settings, serial ]) {
+    addFiscalRegisterToBase(dbFRSettings, [ settings, serial ]).then(result => {
       dispatch('getFiscalRegisters')
     });
   },
