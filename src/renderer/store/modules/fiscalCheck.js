@@ -1,16 +1,32 @@
 
+const remote = require('electron').remote
+const application = remote.app
+
+var Datastore = require('nedb')
+var dbItems = new Datastore({ filename: `${application.getPath('userData')}/items.db`})
+
+dbItems.loadDatabase(function (err) { 
+});
+
+import { getItemFromBase } from '../dbAPI/items/getItem'
 
 const state = {
-  items: []
+  checkItems: []
 }
 
 const mutations = {
-  setItems (state, items) {
-    state.items = items
-  },
+  addItemToCheck (state, item) {
+    state.checkItems.push(item)
+  }
 }
 
 const actions = {
+  addItemToCheck ({ commit }, code) {
+    getItemFromBase(dbItems, code).then(item => {
+      console.log(item)
+      commit('addItemToCheck', item)
+    });
+  },
  /* 
   getItems ({ commit }) {
     getItemsFromBase(dbItems).then(items => {

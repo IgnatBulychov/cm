@@ -8,6 +8,7 @@ dbItems.loadDatabase(function (err) {
 });
 
 import { getItemsFromBase } from '../dbAPI/items/getItems'
+
 import { createItemInBase } from '../dbAPI/items/createItem'
 import { removeItemsFromBase } from '../dbAPI/items/removeItems'
 
@@ -18,7 +19,7 @@ const state = {
 const mutations = {
   setItems (state, items) {
     state.items = items
-  },
+  }
 }
 
 const actions = {
@@ -29,6 +30,7 @@ const actions = {
       commit('setItems', items)
     });
   },
+  
   createItem ({ commit, dispatch }, item) {
     createItemInBase(dbItems, item).then(result => {
       dispatch('getItems')

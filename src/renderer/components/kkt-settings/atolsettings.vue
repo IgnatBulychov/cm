@@ -60,7 +60,17 @@
     </v-container>
     
     <v-card-actions>
-      <v-btn color="blue lighten-1" text @click="connectionTest">Проверить связь</v-btn>        
+
+<v-btn
+      class="ma-2"
+      :loading="loading"
+      :disabled="loading"
+      color="blue lighten-1" text
+       @click="connectionTest"
+    >
+     Проверить связь
+    </v-btn>
+     
       <v-spacer></v-spacer>     
       <v-btn color="green darken-5" class="text-center" text @click="storeSettings">Добавить кассу</v-btn>
     </v-card-actions>
@@ -121,7 +131,9 @@
 
         serial: 0,
         error: '',
-        success: ''
+        success: '',
+
+        loading: false,
       }
     },
     mounted() {
@@ -207,7 +219,7 @@
       connectionTest () {  
 
         let app = this
-
+app.loading = true
         app.success = ''
         app.error = ''
         let options = {
@@ -228,6 +240,7 @@
 
             PythonShell.run('json_task.py', options, function (err, results) {
 console.log(results)
+app.loading = false
               if (results[0] == 'connectionFailed') {
              app.error = 'Нет связи с кассой'
               }  else if (results[0] == 'error') {
@@ -262,7 +275,9 @@ console.log(results)
       storeSettings() {
         let app = this
         this.$store.dispatch('fiscalRegisters/addFiscalRegister', [ app.settings, app.serial ])
-        this.$emit('selected')   
+        this.$emit('selected')  
+        this.error = ''
+        this.success = ''
       },
       getDeviceInfo() {
         let app = this
@@ -365,7 +380,41 @@ console.log(results)
 </script>
 
 
-
-<style>
-  
+<style scopped>
+  .custom-loader {
+    animation: loader 1s infinite;
+    display: flex;
+  }
+  @-moz-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @-webkit-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @-o-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
 </style>

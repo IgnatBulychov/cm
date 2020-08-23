@@ -14,28 +14,15 @@
         </v-btn> 
 
 
-        <v-snackbar
-      v-model="alert.show"
-      top color="success" dark
-    >
-      {{ alert.text }}
-
-      <template v-slot:action="{ attrs }">
-        <v-btn
-          text
-          v-bind="attrs"
-          @click="alert.show = false"
-        >
-          Закрыть
-        </v-btn>
-      </template>
-    </v-snackbar>
+        
+        <alert :alert="alert" />
 
 
   </div>
 </template>
 
 <script>
+import Alert from '../alerts/alert.vue'
   const remote = require('electron').remote;
   const application = remote.app;
 
@@ -48,7 +35,9 @@
 
   export default {
     name: 'reports',
-    
+    components: {
+      Alert
+    },
     data() {
       return {
         alert: {

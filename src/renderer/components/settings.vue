@@ -61,9 +61,9 @@
           </v-dialog>
 
           <v-dialog v-model="dialogSettings" max-width="80%" >
-            <atolsettings
+            <atol-settings
               v-on:selected="dialogSettings = false"
-            ></atolsettings>
+            ></atol-settings>
           </v-dialog>
         </div>  
 
@@ -97,7 +97,7 @@
                 </template>
                 <template v-else>
                   <tr>
-                    <td colspan="3" class="text-center">Нет подключенных касс</td>
+                    <td colspan="4" class="text-center">Нет подключенных касс</td>
                     
                   </tr>
                 </template>         
@@ -108,26 +108,31 @@
       </v-tab-item>
     
     </v-tabs-items>
+
+     <alert :alert="alert" />
   </div>
 </template>
 
 <script>
-  import atolsettings from './kkt-settings/atolsettings'
-
-import { mapState } from 'vuex'
+  import AtolSettings from './kkt-settings/atolsettings'
+ import Alert from './alerts/alert.vue'
 
 
   export default {
     name: 'settings',
     components: {
-      atolsettings
+      AtolSettings, Alert
     },
     data() {
       return {
         tab: null,
         dialogSelectModel: false,
         dialogSettings: false,
-        selectedFR: null
+        selectedFR: null,
+        alert: {
+          show: false,
+          text: ''
+        }
       }
     },
     computed: {
@@ -147,6 +152,10 @@ import { mapState } from 'vuex'
       save() {
         let app = this
         this.$store.dispatch('fiscalRegisters/saveCurrentFR', app.selectedFR)
+        this.alert = {
+          show: true,
+          text: 'Настройки сохранены'
+        }
       }
     }
   }
