@@ -9,6 +9,10 @@
           <v-icon left>mdi-plus</v-icon> Добавить из базы
       </v-btn> 
 
+      <v-btn @click="clearCheck()" class="ma-2" tile outlined color="success">
+        <v-icon left>mdi-plus</v-icon> Очистить
+      </v-btn>
+
       <v-dialog
         v-model="dialogAddFree"
         max-width="80%"
@@ -38,27 +42,38 @@
     <div>
     </div>
 
-    <v-simple-table v-if="checkItems.length">
-      <template v-slot:default>
-        <thead>
-          <tr>
-            <th class="text-left">Наименование</th>
-            <th class="text-left">Цена</th>
-            <th class="text-left">НДС</th>
-          </tr>
-        </thead>
-        <tbody>
-            <tr v-for="item in checkItems" :key="item._id">
-              <td>{{ item.title }}</td>
-              <td>{{ item.price }}</td>
-            </tr>
-                    
-        </tbody>
-      </template>
-    </v-simple-table> 
+<v-card>
+  <v-card-text>
+    <div class="container" v-if="items.length">
+      <div v-for="item in items" :key="item._id" 
+       v-bind:class="[activeItem == item._id ? 'green lighten-4' : '', 'row text-center']"
+        @click="changePosition(item)" 
+      >
+        <div class="col-4">
+            {{ item.title }}
+              
+        </div>
+        <div class="col-2">
+          {{ item.qantity }}
+              
+        </div>
+        <div class="col-2">
+         
+              {{ item.price }}
+        </div>
+        <div class="col-2">
+         
+              {{ item.qantity*item.price }}
+        </div>
+      </div>
+    </div>
+
+  
     <div v-else class="text-center">
       Добавьте позиции в чек
     </div>
+    </v-card-text>
+</v-card>
 
     <div>
       <v-icon>data-matrix-scan</v-icon>
@@ -85,20 +100,30 @@ import addFree from './addFree'
     },
     data() {
       return {
-        code: '',
+        code: null,
          dialogAddFree: false,
          dialogAddFromBase: false
       }
     },
     computed: {
-      checkItems() {
-        return this.$store.state.fiscalCheck.checkItems
+      items() {
+        return this.$store.state.check.items
+      },
+      activeItem() {
+        return this.$store.state.check.activeItem
       }
     },
     methods: {
       addItem () {
-         this.$store.dispatch('fiscalCheck/addItemToCheck', this.code)
-      }
+        this.$store.dispatch('check/getItem', this.code)
+      },
+      clearCheck() {
+        this.$store.commit('check/clearCheck')
+      },
+      changePosition (to) {
+        this.$store.dispatch('check/changePosition', to)
+      },
+
       
     
     }

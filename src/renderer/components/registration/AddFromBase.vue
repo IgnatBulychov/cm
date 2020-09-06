@@ -39,7 +39,7 @@
           },
           { 
             text: 'Штрихкод', 
-            value: 'ean13' 
+            value: 'code' 
           }
         ],
       }

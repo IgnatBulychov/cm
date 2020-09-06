@@ -1,17 +1,23 @@
+const remote = require('electron').remote
+const application = remote.app
 
-export const getItemFromBase = function(db, code) {
-    return new Promise(function(resolve, reject){
-      console.group('----' + code)
-      db.find({ ean13: code }, function (err, docs) {
+var Datastore = require('nedb')
+var db = new Datastore({ filename: `${application.getPath('userData')}/items.db`})
+
+export const getItemFromBase = function(code) {
+  return new Promise(function(resolve, reject){  
+    db.loadDatabase(function (err) { 
+      db.findOne({ code: code }, function (err, doc) {
         if (err) {
           reject(err) 
-        } 
-        if (docs.length) {
-          resolve(docs[0])
+        }      
+        if (doc) {
+          resolve(doc)
         } else {
           resolve(null)
         }   
       });
-    })
-  }
+    }); 
+  })
+}
   

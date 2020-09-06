@@ -35,7 +35,7 @@
                         label="Цена"
                     ></v-text-field>
                     <v-text-field
-                        v-model="item.ean13"
+                        v-model="item.code"
                         label="Штрихкод"
                     ></v-text-field>
                 </v-col>
@@ -101,13 +101,13 @@
           },
           { 
             text: 'Штрихкод', 
-            value: 'ean13' 
+            value: 'code' 
           }
         ],
         item:{
             title: '',
             price: null,
-            ean13: null
+            code: null
         }
 
       }
@@ -126,10 +126,10 @@
            this.$store.dispatch('items/createItem', this.item)
          
            this.dialog = false
-            this.item = {
+           this.item = {
                title: '',
                price: null,
-               ean13: null
+               code: null
            }
         },
         removeItems() {

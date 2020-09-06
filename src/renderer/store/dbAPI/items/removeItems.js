@@ -1,14 +1,23 @@
-export const removeItemsFromBase = function(db, items) {
-    return new Promise(function(resolve, reject){
+const remote = require('electron').remote
+const application = remote.app
 
-        items.forEach(item => {
-            db.remove({ _id: item._id }, {}, function (err, numRemoved) {
-            if (err) {
-                reject(err)
-            } 
-            db.persistence.compactDatafile();
-            resolve(numRemoved)
+var Datastore = require('nedb')
+var db = new Datastore({ filename: `${application.getPath('userData')}/items.db`})
+
+export const removeItemsFromBase = function(items) {
+    return new Promise(function(resolve, reject){
+        db.loadDatabase(function (err) { 
+            items.forEach(function(item, i, arr) {
+                db.remove({ _id: item._id }, {}, function (err, numRemoved) {
+                    if (err) {
+                        reject(err)
+                    } 
+                    console.log(i == arr.length-1)
+                    if (i == arr.length-1) {
+                        resolve(numRemoved)
+                    }                
+                });
             });
-          });
+        });
     })
 }
