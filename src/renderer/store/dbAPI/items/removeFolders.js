@@ -2,13 +2,13 @@ const remote = require('electron').remote
 const application = remote.app
 
 var Datastore = require('nedb')
-var db = new Datastore({ filename: `${application.getPath('userData')}/items.db`})
+var db = new Datastore({ filename: `${application.getPath('userData')}/folders.db`})
 
-export const removeItemsFromBase = function(items) {
+export const removeFoldersFromBase = function(folders) {
     return new Promise(function(resolve, reject){
         db.loadDatabase(function (err) { 
-            items.forEach(function(item, i, arr) {
-                db.remove({ _id: item }, {}, function (err, numRemoved) {
+            folders.forEach(function(folder, i, arr) {
+                db.remove({ _id: folder }, {}, function (err, numRemoved) {
                     if (err) {
                         reject(err)
                     } 
