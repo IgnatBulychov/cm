@@ -31,7 +31,7 @@
           </v-list-item-icon>
           <v-list-item-title>Отчеты</v-list-item-title>
         </v-list-item>
-        <v-list-item color="success" link to='/dashboard/items'>
+        <v-list-item color="success" link to='/dashboard/items?folder=root'>
           <v-list-item-icon>
             <v-icon>mdi-package-variant</v-icon>
           </v-list-item-icon>
@@ -46,8 +46,8 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-content>
-      <v-container fluid>
+    <v-content  height="100vh" >
+      <v-container class="main-container" fluid>
         <router-view></router-view>
       </v-container>
     </v-content> 
@@ -71,6 +71,9 @@
   }
 </script>
 
-<style>
-  
+<style scoped>
+.main-container {
+  padding: 0;
+  height: 100vh;
+}
 </style>

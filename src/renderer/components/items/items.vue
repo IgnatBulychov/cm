@@ -1,31 +1,38 @@
 <template>
   <div class="mx-auto  px-2 py-2" >
+
+    <!-- верхнаяя панель инструментов -->
     <v-btn
       color="primary"
-      dark
+      class="my-1 mx-3"
+      text
       @click.stop="dialogCreateItem = true"
-      tile outlined 
+      
     >
-      <v-icon left>mdi-plus</v-icon> Добавить товар
+      <v-icon text-caption left>mdi-plus</v-icon><v-icon left>mdi-package-variant</v-icon> 
     </v-btn>
 
      <v-btn
       color="primary"
-      dark
+       class="my-1 mx-3"
+       text
       @click.stop="dialogCreateFolder = true"
-      tile outlined 
     >
-      <v-icon left>mdi-plus</v-icon> Добавить каталог
+      <v-icon text-caption left>mdi-plus</v-icon> <v-icon text-caption left>mdi-folder-open-outline</v-icon> 
     </v-btn>
 
     <v-btn
+      :disabled="!selectedItems.length && !selectedFolders.length"
       color="error"
+      text
       @click.stop="remove()"
-      tile outlined 
+       class="my-1 mx-3"
     >
-      Удалить выделенные товары
+      <v-icon text-caption>mdi-delete-outline</v-icon> 
     </v-btn>
 
+    <!-- диалоговые окна -->
+    
     <v-dialog v-model="dialogCreateItem" min-width="80%" >
       <v-card>
         <v-card-text>
@@ -39,11 +46,25 @@
                   <v-text-field
                       v-model="item.price"
                       label="Цена"
+                  ></v-text-field>                  
+                  <v-text-field
+                      v-model="item.costPrice"
+                      label="Цена со скидкой"
                   ></v-text-field>
                   <v-text-field
-                      v-model="item.code"
+                      v-model="item.barcode"
                       label="Штрихкод"
                   ></v-text-field>
+                  <v-select
+                    :items="measureNames"
+                    label="Единица измерения"
+                    v-model="item.measureName"
+                  ></v-select>
+                  <v-select
+                    :items="taxes"
+                    label="Налоговая ставка"
+                    v-model="item.tax"
+                  ></v-select>
                 </v-col>
               </v-row>
           </v-container>
@@ -62,13 +83,7 @@
                       v-model="folder.title"
                       label="Наименование"
                   ></v-text-field>
-                  <v-select
-                    :items="foldersWithNull"
-                    label="Родительская папка"
-                    item-text="title"
-                    item-value="_id"
-                    v-model="folder.parent"
-                  ></v-select>
+                  
                   <v-select
                     :items="taxSystems"
                     label="СНО товаров или услуг каталога"
@@ -82,112 +97,169 @@
       </v-card>
     </v-dialog>
 
-<!-- Список товаров и каталогов -->
-<v-card>
+    <!-- Список товаров и каталогов -->
+    
+    <v-card v-if="folders.length">
+      <v-container>
 
-  <v-container>
-    <v-row v-for="folder in folders" :key="folder._id">
-      <v-col cols="1">
-        <v-checkbox hide-details class="shrink mx-0 my-0"  v-model="selectedFolders" :value="folder._id"></v-checkbox>
-      </v-col>
-      <v-col cols="1">
-         <v-icon>mdi-folder-open-outline</v-icon> 
-        </v-col>
-      <v-col cols="5">
-        {{folder.title}}
-        
-      </v-col>
-    </v-row>
+        <!-- кнопка "назад", в прошлый каталог -->
 
-    <v-row v-for="item in items" :key="item._id">
-      <v-col cols="1">
-        <v-checkbox hide-details class="shrink mx-0 my-0" v-model="selectedItems" :value="item._id"></v-checkbox>
-      </v-col>
-       <v-col cols="1">
-<v-icon>mdi-package-variant-closed</v-icon> 
+        <v-row v-if="$route.query.folder != 'root'">
+          <v-col cols="12" 
+            @click="back()"
+          >...</v-col>
+        </v-row>
+
+        <!-- папки -->
+
+        <v-row v-for="folder in folders" :key="folder._id">
+          <v-col cols="1">
+            <v-checkbox hide-details class="shrink mx-0 my-0"  v-model="selectedFolders" :value="folder._id"></v-checkbox>
           </v-col>
-      <v-col cols="5">
-        {{item.title}}
+      
+          <v-col cols="11"  
+            @click="$router.push({
+              path: '/dashboard/items',
+              query: {
+                      folder: folder._id,
+                  }
+            })"
+          >
+            <v-icon class="mr-4">mdi-folder-open-outline</v-icon>   {{folder.title}} -  {{folder._id}}
+          </v-col>
+        </v-row>
 
+        <!-- товары -->
 
-       </v-col>
-    </v-row>
-  </v-container>
+        <v-row v-for="item in items" :key="item._id">
+          <v-col cols="1">
+            <v-checkbox hide-details class="shrink mx-0 my-0" v-model="selectedItems" :value="item._id"></v-checkbox>
+          </v-col>     
 
-
-
-  <!-- старый варинат
-    <v-card-title>
-      Товары и услуги
-      <v-spacer></v-spacer>
-      <v-text-field
-        v-model="search"
-        append-icon="search-mdi"
-        label="Поиск"
-        single-line
-        hide-details
-      ></v-text-field>
-    </v-card-title>
-    <v-data-table
-    v-model="selectedItems"
-      :headers="headers"
-      :single-select="false"
-      show-select
-       item-key="_id"
-      :items="items"
-      :search="search"
-    >
-    </v-data-table> 
-     -->
-
-  </v-card>
-
-
-
-        </div>  
-
-
+          <v-col cols="1">
+            {{ item.code }}
+          </v-col>            
+            
+          <v-col cols="10">
+              <v-icon class="mr-4">mdi-package-variant-closed</v-icon>  {{item.title}}
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-card>
+    <v-card class="py-3 px-3 text-center" v-else>
+      Товаров и услуг нет
+    </v-card>
+    <alert :alert="alert"/>
+  </div>  
 </template>
 
 <script>
-
+  import { findFolderParent } from '../../store/dbAPI/items/findFolderParent'
+  import Alert from '../alerts/alert'
     export default {
-    name: 'items',
-  
+    name: 'items',  
+    components: {
+      Alert
+    },
     data() {
       return {
         dialogCreateItem: false,
         dialogCreateFolder: false,
         selectedItems: [],
         selectedFolders: [],
-       item:{
-            title: '',
-            price: null,
-            code: null,
-            parent: null
-        },
-        folder:{
-            title: '',
-            parent: '',
-            taxSystem: null
-        },
-        taxSystems: [
-          {
-            text: 'УСН Доходы',
-            value: 'USN_DOHOD'
+        item:{
+              title: '',
+              price: null,
+              costPrice: null,
+              barcode: null,
+              quantity: 0,
+              measureName: 'шт',
+              tax: 'none',
+              parent: "root"
           },
-          {
-            text: 'УСН Доходы-расходы',
-            value: 'USN_DOHOD-RASHOD'
-          }
-        ]
-
+          folder:{
+              title: '',
+              parent: "root",
+              taxSystem: null
+          },
+          taxSystems: [
+            {
+              text: 'Общая',
+              value: 'osn'
+            },
+            {
+              text: 'УСН Доход',
+              value: 'usnIncome'
+            },
+            {
+              text: 'УСН Доход минус Расход',
+              value: 'usnIncomeOutcome'
+            },
+            {
+              text: 'ЕНВД',
+              value: 'envd'
+            },
+            {
+              text: 'Единый сельскохозяйственный налог',
+              value: 'esn'
+            },
+            {
+              text: 'Патент',
+              value: 'patent'
+            }            
+          ],
+          measureNames: [
+            {
+              text: 'шт',
+              value: 'шт'
+            },
+            {
+              text: 'кг',
+              value: 'кг'
+            }
+          ],
+          taxes: [
+            {
+              text: 'Без НДС',
+              value: 'none'
+            },
+            {
+              text: 'НДС 0%',
+              value: 'vat0'
+            },
+            {
+              text: 'НДС 10%',
+              value: 'vat10'
+            },
+            {
+              text: 'НДС 20%',
+              value: 'vat20'
+            },
+            {
+              text: 'НДС 10/110',
+              value: 'vat110'
+            },
+            {
+              text: 'НДС 20/120',
+              value: 'vat120'
+            },
+          ]
       }
     },
-    mounted() {
-      this.$store.dispatch('items/getItems')
+    mounted() {      
       //берем из URL ID родительского каталога
-      this.$store.dispatch('items/getFolders', this.$route.query.folder == undefined ? "root" : this.$route.query.folder)
+      this.$store.dispatch('items/getItems', this.$route.query.folder)
+      this.$store.dispatch('items/getFolders', this.$route.query.folder)
+    },
+    watch: {
+        '$route' (to, from) {           
+          // при смене роута подтягиваем из БД дочерние каталоги и товары этого каталога
+          this.$store.dispatch('items/getFolders', this.$route.query.folder)
+          this.$store.dispatch('items/getItems', this.$route.query.folder)
+          // лучше сбросить выделение во избежание удаления из разных папок и непредсказуемых последствий
+          this.selectedItems = []
+          this.selectedFolders = []
+        },
     },
     computed: {
       /*
@@ -196,54 +268,64 @@
         return this.$store.getters['items/getFoldersAndItems']
       },
       */
+      // только запрошенные каталоги в зависимости от URL
       folders() {
         return this.$store.state.items.folders
       },
       items() {
         return this.$store.state.items.items
+      },  
+      alert() {
+        return this.$store.state.items.alert
       },
-      foldersWithNull() {
-        // добавляем в массив каталогов корневой каталог
-        let folders = [
-          {
-            _id: "root", 
-            title: 'Корневой каталог'
-          }
-        ];
-        let app = this
-        folders.concat(app.$store.state.items.folders)
-        return folders
-      }
+      
     },
-    methods: {
-        
-         createItem() {
-           this.$store.dispatch('items/createItem', this.item)
-         
-           this.dialogCreateItem = false
-           this.item = {
-               title: '',
-               price: null,
-               code: null
-           }
-        },
-        remove() {
-          
-           this.$store.dispatch('items/removeItems', this.selectedItems)
-           this.$store.dispatch('items/removeFolders', this.selectedFolders)
-          
-        },
-
-        
-         createFolder() {
-           this.$store.dispatch('items/createFolder', this.folder)
-         
-           this.dialogCreateFolder = false
-           this.folder = {
-               title: ''
-           }
+    methods: {        
+      createItem() {
+        this.item.parent = this.$route.query.folder
+        this.$store.dispatch('items/createItem', this.item)
+        // сброс формы товара      
+        this.dialogCreateItem = false
+        this.item = {
+            title: '',
+            price: null,
+            barcode: null
         }
-    
+      },
+      //удаляет и item и folder
+      remove() {        
+        if (this.selectedItems.length) {
+          this.$store.dispatch('items/removeItems', this.selectedItems)
+           this.selectedItems = []
+        }
+        if (this.selectedFolders.length) {
+          this.$store.dispatch('items/removeFolders', this.selectedFolders)
+          this.selectedFolders = []
+        }    
+      },
+      createFolder() {
+        // указываем родительский каталог для нового каталога
+        this.folder.parent = this.$route.query.folder
+        this.$store.dispatch('items/createFolder', this.folder)
+        //сброс формы создания каталога
+        this.dialogCreateFolder = false
+        this.folder = {
+            title: ''
+        }
+      },
+      back() {
+        let app = this
+        findFolderParent(this.$route.query.folder).then(parent => {
+          console.log(parent)
+          app.$router.push({
+            path: '/dashboard/items',
+            query: {
+              folder: parent,
+            }
+          })
+        });
+        
+      }
     }
   }
 </script>

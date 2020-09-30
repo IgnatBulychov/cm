@@ -2,12 +2,12 @@ const remote = require('electron').remote
 const application = remote.app
 
 var Datastore = require('nedb')
-var db = new Datastore({ filename: `${application.getPath('userData')}/items.db`})
+var db = new Datastore({ filename: `${application.getPath('userData')}/folders.db`})
 
-export const getItemsFromBase = function(parent) {  
+export const getAllFoldersFromBase = function() {  
   return new Promise(function(resolve, reject){
     db.loadDatabase(function (err) { 
-      db.find({ parent: parent }, function (err, docs) {
+      db.find({}, function (err, docs) {
         if (err) {
           reject(err) 
         } 
