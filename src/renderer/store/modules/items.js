@@ -121,14 +121,23 @@ const actions = {
       findFolderItems(foldersToRemove).then(foundItems => {
         console.log(foundItems)
         let onlyID= []
-            foundItems.forEach(item => {
-                onlyID.push(item._id)
-              });
-        removeItemsFromBase(onlyID).then(result => {
+        foundItems.forEach(item => {
+            onlyID.push(item._id)
+        });
+        if (foundItems.length) {
+          //если в каталогах есть товары, вначале удаляем их, а после успеха - сами каталоги
+          removeItemsFromBase(onlyID).then(result => {
+            removeFoldersFromBase(foldersToRemove).then(res => {
+              dispatch('getFolders', currentFolderID)
+            })
+          })
+        } else {
+          //если в каталогах нет товаров, удаляем только каталоги
           removeFoldersFromBase(foldersToRemove).then(res => {
             dispatch('getFolders', currentFolderID)
           })
-        })
+        }
+        
       })
     }) 
   }

@@ -99,7 +99,7 @@
 
     <!-- Список товаров и каталогов -->
     
-    <v-card v-if="folders.length">
+    <v-card >
       <v-container>
 
         <!-- кнопка "назад", в прошлый каталог -->
@@ -111,7 +111,7 @@
         </v-row>
 
         <!-- папки -->
-
+<div  v-if="folders.length || items.length"> 
         <v-row v-for="folder in folders" :key="folder._id">
           <v-col cols="1">
             <v-checkbox hide-details class="shrink mx-0 my-0"  v-model="selectedFolders" :value="folder._id"></v-checkbox>
@@ -144,11 +144,13 @@
               <v-icon class="mr-4">mdi-package-variant-closed</v-icon>  {{item.title}}
           </v-col>
         </v-row>
+      </div>
+      <div v-else class="py-3 px-3 text-center">
+      Товаров и услуг нет
+    </div>
       </v-container>
     </v-card>
-    <v-card class="py-3 px-3 text-center" v-else>
-      Товаров и услуг нет
-    </v-card>
+    
     <alert :alert="alert"/>
   </div>  
 </template>
@@ -282,6 +284,7 @@
     },
     methods: {        
       createItem() {
+        this.item.barcode = Number(this.item.barcode)
         this.item.parent = this.$route.query.folder
         this.$store.dispatch('items/createItem', this.item)
         // сброс формы товара      
