@@ -93,41 +93,65 @@ const actions = {
   getItem ({ commit, state }, inputCode) {
     //проверка введеного кода на тип
     //
-    if (inputCode.length == 13) {
-      //если это штрихкод
-      // проверяем есть ли в чеке такой же товар
-      if (state.items.find(item => item.barcode == inputCode)) {
-        // если есть ищем его 
-        let item = state.items.find(item => item.barcode == inputCode)
-        // и увеличиваем его количество на 1
-        commit('quantityPlusOne', item)
-      } else { 
-        getItemFromBaseByBarcode(inputCode).then(item => {
-          // если товара нет в чеке назначаем ему количество равное одному
-          item.quantity = 1;
-          // и добавляем в state, в чек
-          commit('addItemToCheck', item)
-        });
-      }
-    } else if (inputCode.length < 7) {
-      // если это внутренний код
-      // проверяем есть ли в чеке такой же товар
-      if (state.items.find(item => item.code == inputCode)) {
-        // если есть ищем его 
-        let item = state.items.find(item => item.code == inputCode)
-        // и увеличиваем его количество на 1
-        commit('quantityPlusOne', item)
-      } else { 
-        getItemFromBaseByCode(inputCode).then(item => {
-          // если товара нет в чеке назначаем ему количество равное одному
-          item.quantity = 1;
-          // и добавляем в state, в чек
-          commit('addItemToCheck', item)
-        });
-      }
-    } else if (inputCode.length > 20) {
-      // если это код маркировки
-    }
+    return new Promise((resolve, reject) => {
+      if (inputCode.length == 13) {
+        //если это штрихкод
+        // проверяем есть ли в чеке такой же товар
+        if (state.items.find(item => item.barcode == inputCode)) {
+          // если есть ищем его 
+          let item = state.items.find(item => item.barcode == inputCode)
+          // и увеличиваем его количество на 1 если товар не маркированный
+          // если маркированый ждем коммит от компонента регистрации, если успешно отсканирован код
+          if (item.mark) {
+            resolve(item)
+          } else {
+            commit('quantityPlusOne', item)
+          }  
+        } else { 
+          getItemFromBaseByBarcode(inputCode).then(item => {
+            // если маркированый ждем коммит от компонента регистрации, если успешно отсканирован код
+            if (item.mark) {
+              resolve(item)
+            } else {
+              // если товара нет в чеке назначаем ему количество равное одному
+              item.quantity = 1;
+              // и добавляем в state, в чек
+              commit('addItemToCheck', item)
+            } 
+          });
+        }
+      } else if (inputCode.length < 7) {
+        // если это внутренний код
+        // проверяем есть ли в чеке такой же товар
+        if (state.items.find(item => item.code == inputCode)) {
+          // если есть ищем его 
+          let item = state.items.find(item => item.code == inputCode)
+          // и увеличиваем его количество на 1 если товар не маркированный
+          // если маркированый ждем коммит от компонента регистрации, если успешно отсканирован код
+          if (item.mark) {
+            resolve(item)
+          } else {
+            // и увеличиваем его количество на 1
+            commit('quantityPlusOne', item)
+          }  
+          
+        } else { 
+          getItemFromBaseByCode(inputCode).then(item => {
+            if (item.mark) {
+              resolve(item)
+            } else {
+              // если товара нет в чеке назначаем ему количество равное одному
+              item.quantity = 1;
+              // и добавляем в state, в чек
+              commit('addItemToCheck', item)
+            } 
+          });
+        }
+      } else if (inputCode.length > 20) {
+        // если это код маркировки
+      }    
+    })
+    
   },
   setQuantity({ commit }, [ item, quantity ]) {
     commit('setQuantity', [ item, quantity ] )

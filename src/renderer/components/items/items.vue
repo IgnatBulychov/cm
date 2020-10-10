@@ -55,6 +55,11 @@
                       v-model="item.barcode"
                       label="Штрихкод"
                   ></v-text-field>
+                  <v-switch
+                    v-model="item.mark"
+                    color="green"
+                    label="Маркированный товар"
+                  ></v-switch>
                   <v-select
                     :items="measureNames"
                     label="Единица измерения"
@@ -175,6 +180,7 @@
               costPrice: null,
               barcode: null,
               quantity: 0,
+              mark: false,
               measureName: 'шт',
               tax: 'none',
               parent: "root"

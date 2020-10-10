@@ -42,6 +42,7 @@
         >
           <v-col cols="3" class="text-left">
               <span v-bind:class="activeItem._id == item._id ? 'font-weight-bold' : ''"> {{ item.title }} </span>            
+          {{ item.nomenclatureCode }}
           </v-col>
           <v-col cols="1">
             <span v-bind:class="activeItem._id == item._id ? 'font-weight-bold' : ''">  {{ Number(item.price).toFixed(2) }} ₽  </span>             
@@ -89,16 +90,19 @@
 
     <div class="footer-bar" >
       <v-toolbar dark color="green lighten-5">    
-        <v-toolbar-items>          
+        <v-toolbar-items>
+          <!--          
           <v-btn @click="dialogAddFree = true"  icon color="success">
             <v-icon>mdi-plus</v-icon> 
           </v-btn>
           <v-btn @click="dialogAddFromBase = true"  icon color="success">
               <v-icon>mdi-view-grid-plus</v-icon>
           </v-btn> 
+          -->
           <v-btn @click="clearCheck()" icon color="error">
             <v-icon>mdi-sticker-remove-outline</v-icon>
           </v-btn>
+          
 
           <v-dialog eager
             v-model="dialogAddFree"
@@ -276,7 +280,7 @@
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-card-title>
-        <v-card-text>
+        <v-card-text>          
           <v-text-field
             ref="itemQuantity"
             :placeholder="quantityOfSelectedItem.toString()"
@@ -291,6 +295,49 @@
            <v-spacer></v-spacer>
       
           <v-btn @click="changeItem()" width="40%" height="50px" dark color="green lighten-2">
+              <v-chip class="ma-2" color="gray" label dark text-color="white">
+                <v-icon> mdi-keyboard </v-icon> Enter
+              </v-chip> Ок        
+            </v-btn>
+             <v-spacer></v-spacer>          
+        </v-card-actions>
+      </v-card>
+      </div>
+    </v-dialog>
+
+    <!-- диалог изменения позиции -->
+
+    <v-dialog eager 
+      @keydown.esc="closeDialogScanDatamatrix()"
+      max-width="50%"
+      v-model="dialogScanDatamatrix"  
+      v-on:click:outside="closeDialogScanDatamatrix" 
+    >
+    <div @click.prevent="$refs.datamatrixInput.focus()">
+    <v-card>
+      <v-card-title>
+        <span class="text-lg-h6">
+          Код маркировки
+        </span>
+        <v-spacer></v-spacer>
+          <v-btn icon @click="closeDialogScanDatamatrix()">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text>
+          <v-text-field
+            ref="datamatrixInput"
+            placeholder="Отсканируйте код маркировки"
+            color="green"
+            v-model="datamatrixCode"
+            v-on:keyup.enter="addKTN()"
+            :rules="[]"
+          ></v-text-field>        
+        </v-card-text>
+        <v-card-actions>    
+           <v-spacer></v-spacer>
+      
+          <v-btn @click="addKTN()" width="40%" height="50px" dark color="green lighten-2">
               <v-chip class="ma-2" color="gray" label dark text-color="white">
                 <v-icon> mdi-keyboard </v-icon> Enter
               </v-chip> Ок        
@@ -322,6 +369,10 @@ export default {
       dialogPayment: false,
       dialogItemChanging: false,
       dialogConfirmСashless: false,
+      dialogScanDatamatrix: false,
+      datamatrixCode: "",
+      nomenclatureCode: "",
+      currentMarkItem: null,
       getFromCustomer: "",
       quantity: "",
       quantityOfSelectedItem: "",
@@ -405,9 +456,22 @@ export default {
     addItem () {
       let app = this
       if (app.inputCode !== "") {
-        app.$store.dispatch('check/getItem', this.inputCode)
+        app.$store.dispatch('check/getItem', this.inputCode).then(item => {
+          if (item.mark) {
+            app.toScanDatamatrix()
+            app.currentMarkItem = item
+          }
+        })
       }
       app.inputCode = ""
+    },
+    addKTN() {
+      this.currentMarkItem.nomenclatureCode = this.datamatrixCode
+      this.currentMarkItem.quantity = 1
+      this.$store.commit('check/addItemToCheck', this.currentMarkItem)      
+      this.currentMarkItem = null
+      this.nomenclatureCode = ""
+      this.closeDialogScanDatamatrix()
     },
     removeItem(item) {
       this.$store.dispatch('check/removeItem', item)
@@ -452,6 +516,12 @@ export default {
       let app = this
       setTimeout(function() { app.$refs.getFromCustomerInput.focus() }, 1)
     },
+    toScanDatamatrix() {
+      this.dialogScanDatamatrix = true;
+      //не грамотно работает, нужно поймать уничтоение компонента
+      let app = this
+      setTimeout(function() { app.$refs.datamatrixInput.focus() }, 1)
+    },
     toConfirmCashless() {
       this.dialogConfirmСashless = true;
       //не грамотно работает, нужно поймать уничтоение компонента
@@ -478,6 +548,13 @@ export default {
     closeDialogPayment() {
       this.dialogPayment = false
       this.getFromCustomer = ""
+      //не грамотно работает, нужно поймать уничтоение компонента
+      let app = this
+      setTimeout(function() { app.$refs.barcodeInput.focus() }, 1)
+    },
+    closeDialogScanDatamatrix() {
+      this.dialogScanDatamatrix = false
+      this.datamatrixInput = ""
       //не грамотно работает, нужно поймать уничтоение компонента
       let app = this
       setTimeout(function() { app.$refs.barcodeInput.focus() }, 1)
